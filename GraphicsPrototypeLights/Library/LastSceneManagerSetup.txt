@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/NateScene.unity
+- path: Assets/Scenes/SravanScene.unity
   isLoaded: 1
   isActive: 1
