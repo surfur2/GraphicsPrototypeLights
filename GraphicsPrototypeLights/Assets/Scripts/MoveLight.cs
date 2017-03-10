@@ -7,6 +7,8 @@ public class MoveLight : MonoBehaviour {
     public float rotationSpeed;
     public List<GameObject> raycastObject;
 
+    public LayerMask PlatformLayer;
+
     private CapsuleCollider myCollider;
     
     // Use this for initialization
@@ -34,11 +36,19 @@ public class MoveLight : MonoBehaviour {
 
         //Raycast the beam of light
         List<RaycastHit> raycastsHit = new List<RaycastHit>();
+        RaycastHit hit;
 
         // Loop through all opbejcts at the edge fo the cone and detect hits.
         foreach (GameObject obj in raycastObject)
         {
-            Physics.Raycast(viewpoint.transform.position, obj.transform.position);
+            if (Physics.Raycast(viewpoint.transform.position,  obj.transform.position, out hit, PlatformLayer))
+            {
+                 //print(hit.transform.gameObject);
+                if (hit.transform.gameObject.GetComponent<PlatformScript>())
+                {
+                    hit.transform.gameObject.GetComponent<PlatformScript>().ChangeMaterial();
+                }
+            }
 
             // Add custom logic for what should happen on a raycast hit here
         }

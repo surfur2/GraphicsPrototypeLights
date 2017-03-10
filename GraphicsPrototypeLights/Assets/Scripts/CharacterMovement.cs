@@ -14,15 +14,17 @@ public class CharacterMovement : MonoBehaviour {
 
     public bool isZLocked = true;
 
-    private int dirReversal = -1;
+    private int dirReversal = 1;
 
     public bool inJump = false;
     public bool onGround = true;
     public Transform GroundCheckObject;
-    private float GroundCheckRadius = 0.2f;
+    private float GroundCheckRadius = 0.1f;
     public LayerMask GroundLayerMask; // All the Platforms should be in this layer.
 
     private float gravity = 0.0f;
+
+    private bool isFacingRight = true;
 
     // Use this for initialization
     void Start () {
@@ -39,6 +41,23 @@ public class CharacterMovement : MonoBehaviour {
 
         float moveX = dirReversal * Clamp(Input.GetAxis("Horizontal"), 0) * factor;
         float moveZ = dirReversal * ((!isZLocked) ? Clamp(Input.GetAxis("Vertical"), 1) * factor : 0.0f);
+
+
+        if ( moveX < 0.0f)
+        {
+            if ( isFacingRight)
+            {
+                GetComponent<Transform>().Rotate(0.0f, 180, 0.0f);
+                isFacingRight = !isFacingRight;
+            }
+        }else if ( moveX > 0.0f)
+        {
+            if (!isFacingRight)
+            {
+                GetComponent<Transform>().Rotate(0.0f, 180, 0.0f);
+                isFacingRight = !isFacingRight;
+            }
+        }
 
         Vector3 MoveVec = new Vector3(moveX, 0.0f, moveZ);
 
