@@ -37,13 +37,26 @@ public class CharacterMovement : MonoBehaviour {
         //Collider[] kap = Physics.OverlapSphere(GroundCheckObject.position, GroundCheckRadius, GroundLayerMask);
         //onGround = kap.Length > 0 ? true : false;
 
+        gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, 0);
+
+
         onGround = Physics.Raycast(GroundCheckObject.position, Vector3.down, GroundCheckRadius, GroundLayerMask);
 
-        float moveX = dirReversal * Clamp(Input.GetAxis("Horizontal"), 0) * factor;
+        float movingHorz = 0;
+        if (Input.GetKey(KeyCode.A))
+        {
+            movingHorz = -1;
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            movingHorz = 1;
+        }
+
+        float moveX = dirReversal * Clamp(movingHorz, 0) * factor;
         float moveZ = dirReversal * ((!isZLocked) ? Clamp(Input.GetAxis("Vertical"), 1) * factor : 0.0f);
 
 
-        if ( moveX < 0.0f)
+        /*if ( moveX < 0.0f)
         {
             if ( isFacingRight)
             {
@@ -57,7 +70,7 @@ public class CharacterMovement : MonoBehaviour {
                 GetComponent<Transform>().Rotate(0.0f, 180, 0.0f);
                 isFacingRight = !isFacingRight;
             }
-        }
+        }*/
 
         Vector3 MoveVec = new Vector3(moveX, 0.0f, moveZ);
 

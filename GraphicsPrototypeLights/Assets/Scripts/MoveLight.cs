@@ -36,17 +36,22 @@ public class MoveLight : MonoBehaviour {
 
         //Raycast the beam of light
         List<RaycastHit> raycastsHit = new List<RaycastHit>();
-        RaycastHit hit;
+        RaycastHit[] hits;
 
         // Loop through all opbejcts at the edge fo the cone and detect hits.
         foreach (GameObject obj in raycastObject)
         {
-            if (Physics.Raycast(viewpoint.transform.position,  obj.transform.position, out hit, PlatformLayer))
+            int layerMark = LayerMask.GetMask("Platform");
+            hits = Physics.RaycastAll(viewpoint.transform.position, obj.transform.position);
+            if (hits != null)
             {
-                 //print(hit.transform.gameObject);
-                if (hit.transform.gameObject.GetComponent<PlatformScript>())
+                foreach (RaycastHit hit in hits)
                 {
-                    hit.transform.gameObject.GetComponent<PlatformScript>().ChangeMaterial();
+                    //print(hit.transform.gameObject);
+                    if (hit.transform.gameObject.tag == "PlatformTag" && hit.transform.gameObject.GetComponent<PlatformScript>())
+                    {
+                        hit.transform.gameObject.GetComponent<PlatformScript>().ChangeMaterial();
+                    }
                 }
             }
 

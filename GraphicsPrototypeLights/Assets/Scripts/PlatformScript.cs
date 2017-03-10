@@ -13,32 +13,32 @@ public class PlatformScript : MonoBehaviour
     public int PlatformCollisionLayer = 8;
     public int PlatformNonCollisionLayer = 5;
 
-    private float SwapDuration = 10.0f;
+    private float SwapDuration = 5.0f;
     private float StartTime = 0.0f;
 
     // Use this for initialization
     void Start()
-    {
-        //ChangeMaterial();
-        
+    {        
     }
 
     // Update is called once per frame
     void Update()
     {
-
         if (LerpUpdate)
         {
-            float lerp = Mathf.PingPong(Time.time, duration) / duration;
-            GetComponent<MeshRenderer>().materials[0].Lerp(InitMaterial, SecondMaterial, lerp);
-            LerpUpdate = (lerp >= 0.975f) ? (false) : true;
+            GetComponent<MeshRenderer>().materials[0].Lerp(InitMaterial, SecondMaterial, duration);
+
+            if (Time.time - StartTime > SwapDuration)
+            {
+                LerpUpdate = false;
+                StartTime = 0.0f;
+                UpdatePhysics();
+            }
 
         }
-
-        if (StartTime > 0.0f)
-        if (Time.time - StartTime > SwapDuration)
+        else
         {
-            UpdatePhysics();
+            GetComponent<MeshRenderer>().materials[0].Lerp(SecondMaterial, InitMaterial, duration);
         }
 
     }
@@ -51,7 +51,6 @@ public class PlatformScript : MonoBehaviour
 
     public void ChangeMaterial()
     {
-        //print("apksoaf");
         StartTime = Time.time;
         LerpUpdate = true;
         UpdatePhysics();
